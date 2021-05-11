@@ -87,6 +87,7 @@
 #define OSD_MSG_HOLDING_WAYPOINT    "HOLDING WAYPOINT"
 #define OSD_MSG_TO_WP               "TO WP"
 #define OSD_MSG_PREPARE_NEXT_WP     "PREPARING FOR NEXT WAYPOINT"
+#define OSD_MSG_WP_RTH_CANCEL       "CANCEL WP MODE TO EXIT RTH"
 #define OSD_MSG_EMERG_LANDING       "EMERGENCY LANDING"
 #define OSD_MSG_LANDING             "LANDING"
 #define OSD_MSG_LOITERING_HOME      "LOITERING AROUND HOME"
@@ -227,6 +228,9 @@ typedef enum {
     OSD_NAV_FW_CONTROL_SMOOTHNESS,
     OSD_VERSION,
     OSD_RANGEFINDER,
+    OSD_PLIMIT_REMAINING_BURST_TIME,
+    OSD_PLIMIT_ACTIVE_CURRENT_LIMIT,
+    OSD_PLIMIT_ACTIVE_POWER_LIMIT,
     OSD_ITEM_COUNT // MUST BE LAST
 } osd_items_e;
 
@@ -244,6 +248,11 @@ typedef enum {
 } osd_stats_energy_unit_e;
 
 typedef enum {
+    OSD_STATS_MIN_VOLTAGE_UNIT_BATTERY,
+    OSD_STATS_MIN_VOLTAGE_UNIT_CELL,
+} osd_stats_min_voltage_unit_e;
+
+typedef enum {
     OSD_CROSSHAIRS_STYLE_DEFAULT,
     OSD_CROSSHAIRS_STYLE_AIRCRAFT,
     OSD_CROSSHAIRS_STYLE_TYPE3,
@@ -256,7 +265,7 @@ typedef enum {
 typedef enum {
     OSD_SIDEBAR_SCROLL_NONE,
     OSD_SIDEBAR_SCROLL_ALTITUDE,
-    OSD_SIDEBAR_SCROLL_GROUND_SPEED,
+    OSD_SIDEBAR_SCROLL_SPEED,
     OSD_SIDEBAR_SCROLL_HOME_DISTANCE,
 
     OSD_SIDEBAR_SCROLL_MAX = OSD_SIDEBAR_SCROLL_HOME_DISTANCE,
@@ -275,6 +284,7 @@ typedef enum {
 typedef enum {
     OSD_CRSF_LQ_TYPE1,
     OSD_CRSF_LQ_TYPE2,
+    OSD_CRSF_LQ_TYPE3
 } osd_crsf_lq_format_e;
 
 typedef struct osdLayoutsConfig_s {
@@ -339,6 +349,7 @@ typedef struct osdConfig_s {
 
     uint8_t units; // from osd_unit_e
     uint8_t stats_energy_unit; // from osd_stats_energy_unit_e
+    uint8_t stats_min_voltage_unit; // from osd_stats_min_voltage_unit_e
 
 #ifdef USE_WIND_ESTIMATOR
     bool    estimations_wind_compensation; // use wind compensation for estimated remaining flight/distance
@@ -362,6 +373,8 @@ typedef struct osdConfig_s {
     uint8_t pan_servo_index;            // Index of the pan servo used for home direction offset
     int8_t pan_servo_pwm2centideg;      // Centidegrees of servo rotation per us pwm
     uint8_t crsf_lq_format;
+    uint8_t sidebar_height;             // sidebar height in rows, 0 turns off sidebars leaving only level indicator arrows
+    uint8_t telemetry; 				    // use telemetry on displayed pixel line 0
 
 } osdConfig_t;
 

@@ -512,22 +512,25 @@ static int32_t osdCanvasSidebarGetValue(osd_sidebar_scroll_e scroll)
                     return osdGetAltitude();
             }
             break;
-        case OSD_SIDEBAR_SCROLL_GROUND_SPEED:
+        case OSD_SIDEBAR_SCROLL_SPEED:
+            {
 #if defined(USE_GPS)
-            switch ((osd_unit_e)osdConfig()->units) {
-                case OSD_UNIT_UK:
-                    FALLTHROUGH;
-                case OSD_UNIT_IMPERIAL:
-                    // cms/s to (mi/h) * 100
-                    return gpsSol.groundSpeed * 224 / 100;
-                case OSD_UNIT_CANADA:
-                    FALLTHROUGH;
-                case OSD_UNIT_METRIC:
-                    // cm/s to (km/h) * 100
-                    return gpsSol.groundSpeed * 36 / 10;
-            }
+                int speed = osdGetSpeedFromSelectedSource();
+                switch ((osd_unit_e)osdConfig()->units) {
+                    case OSD_UNIT_UK:
+                        FALLTHROUGH;
+                    case OSD_UNIT_IMPERIAL:
+                        // cms/s to (mi/h) * 100
+                        return speed * 224 / 100;
+                    case OSD_UNIT_CANADA:
+                        FALLTHROUGH;
+                    case OSD_UNIT_METRIC:
+                        // cm/s to (km/h) * 100
+                        return speed * 36 / 10;
+                }
 #endif
-            break;
+                break;
+            }
         case OSD_SIDEBAR_SCROLL_HOME_DISTANCE:
 #if defined(USE_GPS)
             switch ((osd_unit_e)osdConfig()->units) {
@@ -553,7 +556,7 @@ static uint8_t osdCanvasSidebarGetOptions(int *width, osd_sidebar_scroll_e scrol
             break;
         case OSD_SIDEBAR_SCROLL_ALTITUDE:
             FALLTHROUGH;
-        case OSD_SIDEBAR_SCROLL_GROUND_SPEED:
+        case OSD_SIDEBAR_SCROLL_SPEED:
             FALLTHROUGH;
         case OSD_SIDEBAR_SCROLL_HOME_DISTANCE:
             *width = OSD_CHAR_WIDTH * 5; // 4 numbers + unit
@@ -596,7 +599,7 @@ static void osdCanvasSidebarGetUnit(osdUnit_t *unit, uint16_t *countsPerStep, os
                     break;
             }
             break;
-        case OSD_SIDEBAR_SCROLL_GROUND_SPEED:
+        case OSD_SIDEBAR_SCROLL_SPEED:
             switch ((osd_unit_e)osdConfig()->units) {
                 case OSD_UNIT_UK:
                     FALLTHROUGH;
